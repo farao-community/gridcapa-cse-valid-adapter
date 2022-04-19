@@ -32,10 +32,10 @@ public class CseValidAdapterListener {
 
     @Bean
     public Consumer<TaskDto> consumeTask() {
-        return this::handleTaskk;
+        return this::handleTask;
     }
 
-    private void handleTaskk(TaskDto taskDto) {
+    private void handleTask(TaskDto taskDto) {
         try {
             if (taskDto.getStatus() == TaskStatus.READY
                     || taskDto.getStatus() == TaskStatus.SUCCESS

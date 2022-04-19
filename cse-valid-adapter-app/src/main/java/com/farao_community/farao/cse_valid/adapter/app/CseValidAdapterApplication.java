@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author Theo Pascoli {@literal <theo.pascoli at rte-france.com>}
  */
+@SuppressWarnings("hideutilityclassconstructor")
 @SpringBootApplication
 public class CseValidAdapterApplication {
     public static void main(String[] args) {

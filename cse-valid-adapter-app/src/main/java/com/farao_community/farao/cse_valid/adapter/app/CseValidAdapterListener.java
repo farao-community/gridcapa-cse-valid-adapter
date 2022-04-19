@@ -6,7 +6,10 @@
  */
 package com.farao_community.farao.cse_valid.adapter.app;
 
+import com.farao_community.farao.cse_valid.api.resource.CseValidRequest;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskDto;
+import com.farao_community.farao.gridcapa.task_manager.api.TaskStatus;
+import com.farao_community.farao.gridcapa_cse_valid.starter.CseValidClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -29,19 +32,21 @@ public class CseValidAdapterListener {
 
     @Bean
     public Consumer<TaskDto> consumeTask() {
-        return this::handleManualTask;
+        return this::handleTask;
     }
 
-    @Bean
-    public Consumer<TaskDto> consumeAutoTask() {
-        return this::handleAutoTask;
-    }
-
-    private void handleAutoTask(TaskDto taskDto) {
-
-    }
-
-    private void handleManualTask(TaskDto taskDto) {
-
+    private void handleTask(TaskDto taskDto) {
+        try {
+            if (taskDto.getStatus() == TaskStatus.READY
+                    || taskDto.getStatus() == TaskStatus.SUCCESS
+                    || taskDto.getStatus() == TaskStatus.ERROR) {
+                LOGGER.info("Handling manual run request on TS {} ", taskDto.getTimestamp());
+                cseValidClient.run(new CseValidRequest(String.valueOf(taskDto.getId())));
+            } else {
+                LOGGER.warn("Failed to handle manual run request on timestamp {} because it is not ready yet", taskDto.getTimestamp());
+            }
+        } catch (Exception e) {
+            throw new CseValidAdapterException(String.format("Error during handling manual run request %s on TS ", taskDto.getTimestamp()), e);
+        }
     }
 }

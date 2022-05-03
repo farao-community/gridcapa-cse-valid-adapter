@@ -56,7 +56,7 @@ public class CseValidAdapterListener {
         }
     }
 
-    private CseValidRequest buildCseValidRequest(TaskDto taskDto) {
+    CseValidRequest buildCseValidRequest(TaskDto taskDto) {
         switch (cseValidAdapterConfiguration.getTargetProcess()) {
             case "IDCC":
                 return CseValidRequest.buildIdccValidRequest(taskDto.getId().toString(),
@@ -79,12 +79,12 @@ public class CseValidAdapterListener {
     }
 
     private CseValidFileResource getFileFromTaskDto(TaskDto taskDto, String fileType) {
-        for (ProcessFileDto processFileDto : taskDto.getProcessFiles()) {
+        for (ProcessFileDto processFileDto : taskDto.getInputs()) {
             String processFileDtoFileType = processFileDto.getFileType();
             if (fileType.equals(processFileDtoFileType)) {
                 return new CseValidFileResource(processFileDto.getFilename(), processFileDto.getFileUrl());
             }
         }
-        return null;
+        throw new IllegalArgumentException("Unexpected value: " + fileType);
     }
 }

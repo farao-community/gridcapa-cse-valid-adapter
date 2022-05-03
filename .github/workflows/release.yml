@@ -42,10 +42,10 @@ jobs:
       - name: Commit and tag release version
         uses: stefanzweifel/git-auto-commit-action@master
         with:
-          branch: release-v${{ github.event.inputs.releaseVersion }}
+          branch: release-${{ github.event.inputs.releaseVersion }}
           create_branch: true
           commit_message: Prepare release ${{ github.event.inputs.releaseVersion }}
-          tagging_message: v${{ github.event.inputs.releaseVersion }}
+          tagging_message: ${{ github.event.inputs.releaseVersion }}
 
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1.4.0
@@ -65,7 +65,7 @@ jobs:
           name: farao/gridcapa-cse-valid-adapter
           username: farao
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          tags: v${{ github.event.inputs.releaseVersion }}
+          tags: ${{ github.event.inputs.releaseVersion }}
 
       - name: Change Maven version to next version
         run: mvn --batch-mode versions:set -DgenerateBackupPoms=false -DnewVersion=${{ github.event.inputs.nextVersion }}-SNAPSHOT
@@ -73,7 +73,7 @@ jobs:
       - name: Commit next version
         uses: stefanzweifel/git-auto-commit-action@master
         with:
-          branch: next-release-v${{ github.event.inputs.nextVersion }}
+          branch: next-release-${{ github.event.inputs.nextVersion }}
           create_branch: true
           commit_message: Prepare next release ${{ github.event.inputs.nextVersion }}
           skip_fetch: true
@@ -83,7 +83,7 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: next-release-v${{ github.event.inputs.nextVersion }}
+          from_branch: next-release-${{ github.event.inputs.nextVersion }}
           target_branch: master
           message: Automatic merge after release ${{ github.event.inputs.releaseVersion }}
           github_token: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -92,4 +92,4 @@ jobs:
         uses: dawidd6/action-delete-branch@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branches: next-release-v${{ github.event.inputs.nextVersion }}
+          branches: next-release-${{ github.event.inputs.nextVersion }}

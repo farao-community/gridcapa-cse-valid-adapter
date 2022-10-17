@@ -131,7 +131,7 @@ class CseValidAdapterListenerTest {
 
     @Test
     void consumeTaskThrowingError() {
-        Mockito.when(cseValidClient.run(Mockito.any())).thenThrow(new CseValidInternalException("message"));
+        Mockito.doThrow(new CseValidInternalException("message")).when(cseValidClient).run(Mockito.any());
         TaskDto taskDto = createTaskDtoWithStatus(TaskStatus.ERROR);
         Consumer<TaskDto> taskDtoConsumer = cseValidAdapterListener.consumeTask();
         assertThrows(CseValidAdapterException.class, () -> taskDtoConsumer.accept(taskDto));

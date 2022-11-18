@@ -11,6 +11,8 @@ spring:
           binder: rabbit
           destination: cse-valid-run-task
           group: cse-valid
+        task-status-update:
+          destination: task-manager-status-update
       rabbit:
         default:
           consumer:

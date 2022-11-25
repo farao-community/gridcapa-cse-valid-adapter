@@ -34,7 +34,8 @@ import java.util.stream.Collectors;
 public class CseValidAdapterService {
 
     private static final String TTC_ADJUSTMENT_FILE_TYPE = "TTC_ADJUSTMENT";
-    private static final String CRAC_FILE_TYPE = "CRAC";
+    private static final String IMPORT_CRAC_FILE_TYPE = "IMPORT_CRAC";
+    private static final String EXPORT_CRAC_FILE_TYPE = "EXPORT_CRAC";
     private static final String CGM_FILE_TYPE = "CGM";
     private static final String GLSK_FILE_TYPE = "GLSK";
     private static final String TASK_STATUS_UPDATE = "task-status-update";
@@ -68,17 +69,21 @@ public class CseValidAdapterService {
 
     private CseValidRequest buildCseValidRequest(TaskDto taskDto) {
         Map<String, CseValidFileResource> files = getCseValidFileResourcesFromTaskDto(taskDto);
+        CseValidFileResource importCrac = files.get(IMPORT_CRAC_FILE_TYPE);
+        CseValidFileResource exportCrac = files.get(EXPORT_CRAC_FILE_TYPE);
+        if (importCrac == null && exportCrac == null) {
+            throw new CseValidAdapterServiceException("None of the " + IMPORT_CRAC_FILE_TYPE + " and " + EXPORT_CRAC_FILE_TYPE + " were found");
+        }
         String id = taskDto.getId().toString();
         OffsetDateTime timestamp = taskDto.getTimestamp();
         CseValidFileResource ttcAdjustment = getCseValidFileResource(files, TTC_ADJUSTMENT_FILE_TYPE);
-        CseValidFileResource crac = getCseValidFileResource(files, CRAC_FILE_TYPE);
         CseValidFileResource cgm = getCseValidFileResource(files, CGM_FILE_TYPE);
         CseValidFileResource glsk = getCseValidFileResource(files, GLSK_FILE_TYPE);
         switch (cseValidAdapterConfiguration.getTargetProcess()) {
             case IDCC:
-                return CseValidRequest.buildIdccValidRequest(id, timestamp, ttcAdjustment, crac, cgm, glsk);
+                return CseValidRequest.buildIdccValidRequest(id, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
             case D2CC:
-                return CseValidRequest.buildD2ccValidRequest(id, timestamp, ttcAdjustment, crac, cgm, glsk);
+                return CseValidRequest.buildD2ccValidRequest(id, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
             default:
                 throw new NotImplementedException("Unknown target process for CSE: " + cseValidAdapterConfiguration.getTargetProcess());
         }

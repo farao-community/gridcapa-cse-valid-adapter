@@ -26,9 +26,13 @@ public final class TestData {
     private static final String TTC_ADJUSTMENT_FILE_NAME = "ttc_adj.txt";
     private static final String TTC_ADJUSTMENT_FILE_URL = "file://ttcadj.txt";
 
-    private static final String CRAC_FILE_TYPE = "CRAC";
-    private static final String CRAC_FILE_NAME = "crac.txt";
-    private static final String CRAC_FILE_URL = "file://crac.txt";
+    private static final String IMPORT_CRAC_FILE_TYPE = "IMPORT_CRAC";
+    private static final String IMPORT_CRAC_FILE_NAME = "importCrac.txt";
+    private static final String IMPORT_CRAC_FILE_URL = "file://importCrac.txt";
+
+    private static final String EXPORT_CRAC_FILE_TYPE = "EXPORT_CRAC";
+    private static final String EXPORT_CRAC_FILE_NAME = "exportCrac.txt";
+    private static final String EXPORT_CRAC_FILE_URL = "file://exportCrac.txt";
 
     private static final String CGM_FILE_TYPE = "CGM";
     private static final String CGM_FILE_NAME = "cgm.uct";
@@ -43,64 +47,121 @@ public final class TestData {
     private TestData() {
     }
 
-    public static CseValidRequest getCseValidRequest(ProcessType processType) {
+    /* --------------- IMPORT CORNER --------------- */
+
+    public static CseValidRequest getImportCseValidRequest(ProcessType processType) {
         String id = TASK_ID.toString();
         OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
         CseValidFileResource ttcAdjustment = new CseValidFileResource(TTC_ADJUSTMENT_FILE_NAME, TTC_ADJUSTMENT_FILE_URL);
-        CseValidFileResource crac = new CseValidFileResource(CRAC_FILE_NAME, CRAC_FILE_URL);
+        CseValidFileResource importCrac = new CseValidFileResource(IMPORT_CRAC_FILE_TYPE, IMPORT_CRAC_FILE_URL);
         CseValidFileResource cgm = new CseValidFileResource(CGM_FILE_NAME, CGM_FILE_URL);
         CseValidFileResource glsk = new CseValidFileResource(GLSK_FILE_NAME, GLSK_FILE_URL);
-        return new CseValidRequest(id, processType, timestamp, ttcAdjustment, crac, cgm, glsk, timestamp);
+        return new CseValidRequest(id, processType, timestamp, ttcAdjustment, importCrac, null, cgm, glsk, timestamp);
     }
 
-    public static TaskDto getTaskDto(TaskStatus status) {
+    public static TaskDto getImportTaskDto(TaskStatus status) {
         UUID id = TASK_ID;
         OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
         List<ProcessFileDto> inputs = new ArrayList<>();
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
-        inputs.add(new ProcessFileDto(CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, CRAC_FILE_NAME, timestamp, CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp, IMPORT_CRAC_FILE_URL));
         inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
         inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
         return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
     }
 
-    public static TaskDto getTaskDtoWithoutTtcFile(TaskStatus status) {
+    public static TaskDto getImportTaskDtoWithoutTtcFile(TaskStatus status) {
         UUID id = UUID.randomUUID();
         OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
         List<ProcessFileDto> inputs = new ArrayList<>();
-        inputs.add(new ProcessFileDto(CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, CRAC_FILE_NAME, timestamp, CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp, IMPORT_CRAC_FILE_URL));
         inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
         inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
         return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
     }
 
-    public static TaskDto getTaskDtoWithoutCracFile(TaskStatus status) {
+    public static TaskDto getImportTaskDtoWithoutCgmFile(TaskStatus status) {
+        UUID id = TASK_ID;
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
+        inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp, IMPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public static TaskDto getImportTaskDtoWithoutGlskFile(TaskStatus status) {
+        UUID id = TASK_ID;
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
+        inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp, IMPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    /* --------------- EXPORT CORNER --------------- */
+
+    public static CseValidRequest getExportCseValidRequest(ProcessType processType) {
+        String id = TASK_ID.toString();
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        CseValidFileResource ttcAdjustment = new CseValidFileResource(TTC_ADJUSTMENT_FILE_NAME, TTC_ADJUSTMENT_FILE_URL);
+        CseValidFileResource exportCrac = new CseValidFileResource(EXPORT_CRAC_FILE_NAME, EXPORT_CRAC_FILE_URL);
+        CseValidFileResource cgm = new CseValidFileResource(CGM_FILE_NAME, CGM_FILE_URL);
+        CseValidFileResource glsk = new CseValidFileResource(GLSK_FILE_NAME, GLSK_FILE_URL);
+        return new CseValidRequest(id, processType, timestamp, ttcAdjustment, null, exportCrac, cgm, glsk, timestamp);
+    }
+
+    public static TaskDto getExportTaskDto(TaskStatus status) {
+        UUID id = TASK_ID;
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
+        inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp, EXPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
+        inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public static TaskDto geExportTaskDtoWithoutTtcFile(TaskStatus status) {
+        UUID id = UUID.randomUUID();
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp, EXPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
+        inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public static TaskDto getExportTaskDtoWithoutCgmFile(TaskStatus status) {
+        UUID id = TASK_ID;
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
+        inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp, EXPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public static TaskDto getExportTaskDtoWithoutGlskFile(TaskStatus status) {
+        UUID id = TASK_ID;
+        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
+        List<ProcessFileDto> inputs = new ArrayList<>();
+        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
+        inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp, EXPORT_CRAC_FILE_URL));
+        inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
+        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+    }
+
+    /* --------------- IMPORT AND EXPORT CORNER --------------- */
+
+    public static TaskDto getTaskDtoWithoutCracFiles(TaskStatus status) {
         UUID id = TASK_ID;
         OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
         List<ProcessFileDto> inputs = new ArrayList<>();
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
         inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
         inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
-    }
-
-    public static TaskDto getTaskDtoWithoutCgmFile(TaskStatus status) {
-        UUID id = TASK_ID;
-        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
-        List<ProcessFileDto> inputs = new ArrayList<>();
-        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
-        inputs.add(new ProcessFileDto(CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, CRAC_FILE_NAME, timestamp, CRAC_FILE_URL));
-        inputs.add(new ProcessFileDto(GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp, GLSK_FILE_URL));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
-    }
-
-    public static TaskDto getTaskDtoWithoutGlskFile(TaskStatus status) {
-        UUID id = TASK_ID;
-        OffsetDateTime timestamp = OffsetDateTime.parse("2022-05-03T14:30Z");
-        List<ProcessFileDto> inputs = new ArrayList<>();
-        inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp, TTC_ADJUSTMENT_FILE_URL));
-        inputs.add(new ProcessFileDto(CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, CRAC_FILE_NAME, timestamp, CRAC_FILE_URL));
-        inputs.add(new ProcessFileDto(CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp, CGM_FILE_URL));
         return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
     }
 }

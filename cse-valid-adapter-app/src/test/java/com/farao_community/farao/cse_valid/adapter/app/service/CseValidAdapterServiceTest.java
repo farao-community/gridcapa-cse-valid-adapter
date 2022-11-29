@@ -45,14 +45,16 @@ class CseValidAdapterServiceTest {
     @Autowired
     private CseValidAdapterService cseValidAdapterService;
 
+    /* --------------- IMPORT CORNER --------------- */
+
     @Test
-    void runAsyncIdccShouldCallSuccessfullyCseValidClientRun() {
-        TaskDto taskDto = TestData.getTaskDto(TaskStatus.READY);
-        CseValidRequest cseValidRequest = TestData.getCseValidRequest(ProcessType.IDCC);
+    void runAsyncImportIdccShouldCallSuccessfullyCseValidClientRun() {
+        TaskDto taskDto = TestData.getImportTaskDto(TaskStatus.READY);
+        CseValidRequest cseValidRequest = TestData.getImportCseValidRequest(ProcessType.IDCC);
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.IDCC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 
@@ -62,13 +64,13 @@ class CseValidAdapterServiceTest {
     }
 
     @Test
-    void runAsyncD2ccShouldCallSuccessfullyCseValidClientRun() {
-        TaskDto taskDto = TestData.getTaskDto(TaskStatus.READY);
-        CseValidRequest cseValidRequest = TestData.getCseValidRequest(ProcessType.D2CC);
+    void runAsyncImportD2ccShouldCallSuccessfullyCseValidClientRun() {
+        TaskDto taskDto = TestData.getImportTaskDto(TaskStatus.READY);
+        CseValidRequest cseValidRequest = TestData.getImportCseValidRequest(ProcessType.D2CC);
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.D2CC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 
@@ -78,32 +80,92 @@ class CseValidAdapterServiceTest {
     }
 
     @Test
-    void runAsyncShouldFailBecauseTtcAdjustmentFileNotFound() {
-        TaskDto taskDto = TestData.getTaskDtoWithoutTtcFile(TaskStatus.READY);
+    void runAsyncImportShouldFailBecauseTtcAdjustmentFileNotFound() {
+        TaskDto taskDto = TestData.getImportTaskDtoWithoutTtcFile(TaskStatus.READY);
         cseValidAdapterService.runAsync(taskDto);
         verify(cseValidClient, never()).run(any());
         verify(streamBridge, times(1)).send(any(), any());
     }
 
     @Test
-    void runAsyncShouldFailBecauseCracFileNotFound() {
-        TaskDto taskDto = TestData.getTaskDtoWithoutCracFile(TaskStatus.READY);
+    void runAsyncImportShouldFailBecauseCgmFileNotFound() {
+        TaskDto taskDto = TestData.getImportTaskDtoWithoutCgmFile(TaskStatus.READY);
         cseValidAdapterService.runAsync(taskDto);
         verify(cseValidClient, never()).run(any());
         verify(streamBridge, times(1)).send(any(), any());
     }
 
     @Test
-    void runAsyncShouldFailBecauseCgmFileNotFound() {
-        TaskDto taskDto = TestData.getTaskDtoWithoutCgmFile(TaskStatus.READY);
+    void runAsyncImportcShouldFailBecauseGlskFileNotFound() {
+        TaskDto taskDto = TestData.getImportTaskDtoWithoutGlskFile(TaskStatus.READY);
+        cseValidAdapterService.runAsync(taskDto);
+        verify(cseValidClient, never()).run(any());
+        verify(streamBridge, times(1)).send(any(), any());
+    }
+
+    /* --------------- EXPORT CORNER --------------- */
+
+    @Test
+    void runAsyncExportIdccShouldCallSuccessfullyCseValidClientRun() {
+        TaskDto taskDto = TestData.getExportTaskDto(TaskStatus.READY);
+        CseValidRequest cseValidRequest = TestData.getExportCseValidRequest(ProcessType.IDCC);
+
+        when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.IDCC);
+        try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
+            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+
+            cseValidAdapterService.runAsync(taskDto);
+
+            verify(streamBridge, never()).send(any(), any());
+            verify(cseValidClient, timeout(1000).times(1)).run(cseValidRequest);
+        }
+    }
+
+    @Test
+    void runAsyncExportD2ccShouldCallSuccessfullyCseValidClientRun() {
+        TaskDto taskDto = TestData.getExportTaskDto(TaskStatus.READY);
+        CseValidRequest cseValidRequest = TestData.getExportCseValidRequest(ProcessType.D2CC);
+
+        when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.D2CC);
+        try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
+            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+
+            cseValidAdapterService.runAsync(taskDto);
+
+            verify(streamBridge, never()).send(any(), any());
+            verify(cseValidClient, timeout(1000).times(1)).run(cseValidRequest);
+        }
+    }
+
+    @Test
+    void runAsyncExportShouldFailBecauseTtcAdjustmentFileNotFound() {
+        TaskDto taskDto = TestData.geExportTaskDtoWithoutTtcFile(TaskStatus.READY);
         cseValidAdapterService.runAsync(taskDto);
         verify(cseValidClient, never()).run(any());
         verify(streamBridge, times(1)).send(any(), any());
     }
 
     @Test
-    void runAsyncShouldFailBecauseGlskFileNotFound() {
-        TaskDto taskDto = TestData.getTaskDtoWithoutGlskFile(TaskStatus.READY);
+    void runAsyncExportShouldFailBecauseCgmFileNotFound() {
+        TaskDto taskDto = TestData.getExportTaskDtoWithoutCgmFile(TaskStatus.READY);
+        cseValidAdapterService.runAsync(taskDto);
+        verify(cseValidClient, never()).run(any());
+        verify(streamBridge, times(1)).send(any(), any());
+    }
+
+    @Test
+    void runAsyncExportcShouldFailBecauseGlskFileNotFound() {
+        TaskDto taskDto = TestData.getExportTaskDtoWithoutGlskFile(TaskStatus.READY);
+        cseValidAdapterService.runAsync(taskDto);
+        verify(cseValidClient, never()).run(any());
+        verify(streamBridge, times(1)).send(any(), any());
+    }
+
+    /* --------------- IMPORT AND EXPORT CORNER --------------- */
+
+    @Test
+    void runAsyncShouldFailBecauseCracFilesNotFound() {
+        TaskDto taskDto = TestData.getTaskDtoWithoutCracFiles(TaskStatus.READY);
         cseValidAdapterService.runAsync(taskDto);
         verify(cseValidClient, never()).run(any());
         verify(streamBridge, times(1)).send(any(), any());

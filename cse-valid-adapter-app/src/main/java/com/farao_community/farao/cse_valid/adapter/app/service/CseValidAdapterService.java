@@ -91,10 +91,15 @@ public class CseValidAdapterService {
 
     private static Map<String, CseValidFileResource> getCseValidFileResourcesFromTaskDto(TaskDto taskDto) {
         return taskDto.getInputs().stream()
+                .filter(CseValidAdapterService::isInputValid)
                 .collect(Collectors.toMap(
                     ProcessFileDto::getFileType,
                     processFileDto -> new CseValidFileResource(processFileDto.getFilename(), processFileDto.getFileUrl())
                 ));
+    }
+
+    private static boolean isInputValid(ProcessFileDto processFileDto) {
+        return processFileDto.getFilename() != null && processFileDto.getFileUrl() != null;
     }
 
     private static CseValidFileResource getCseValidFileResource(Map<String, CseValidFileResource> files, String fileType) {

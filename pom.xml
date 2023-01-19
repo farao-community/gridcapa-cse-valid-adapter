@@ -37,7 +37,7 @@
 
     <properties>
         <task-manager.version>1.9.0</task-manager.version>
-        <cse-valid-runner.version>1.3.0</cse-valid-runner.version>
+        <cse-valid-runner.version>1.5.0</cse-valid-runner.version>
         <logstash.version>7.0.1</logstash.version>
     </properties>
 

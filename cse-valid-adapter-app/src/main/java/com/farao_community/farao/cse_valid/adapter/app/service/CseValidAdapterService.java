@@ -15,6 +15,7 @@ import com.farao_community.farao.gridcapa.task_manager.api.TaskDto;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskStatus;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskStatusUpdate;
 import com.farao_community.farao.gridcapa_cse_valid.starter.CseValidClient;
+import com.farao_community.farao.minio_adapter.starter.MinioAdapter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
@@ -44,15 +45,17 @@ public class CseValidAdapterService {
     private final CseValidAdapterConfiguration cseValidAdapterConfiguration;
     private final StreamBridge streamBridge;
     private final Logger businessLogger;
+    private final MinioAdapter minioAdapter;
 
     public CseValidAdapterService(CseValidClient cseValidClient,
                                   CseValidAdapterConfiguration cseValidAdapterConfiguration,
                                   StreamBridge streamBridge,
-                                  Logger businessLogger) {
+                                  Logger businessLogger, MinioAdapter minioAdapter) {
         this.cseValidClient = cseValidClient;
         this.cseValidAdapterConfiguration = cseValidAdapterConfiguration;
         this.streamBridge = streamBridge;
         this.businessLogger = businessLogger;
+        this.minioAdapter = minioAdapter;
     }
 
     public void runAsync(TaskDto taskDto) {
@@ -89,21 +92,23 @@ public class CseValidAdapterService {
         }
     }
 
-    private static Map<String, CseValidFileResource> getCseValidFileResourcesFromTaskDto(TaskDto taskDto) {
+    private Map<String, CseValidFileResource> getCseValidFileResourcesFromTaskDto(TaskDto taskDto) {
         return taskDto.getInputs().stream()
-                .filter(CseValidAdapterService::isInputValid)
-                .collect(Collectors.toMap(
-                    ProcessFileDto::getFileType,
-                    processFileDto -> new CseValidFileResource(processFileDto.getFilename(), processFileDto.getFileUrl())
-                ));
+            .filter(CseValidAdapterService::isInputValid)
+            .collect(Collectors.toMap(
+                ProcessFileDto::getFileType,
+                processFileDto -> new CseValidFileResource(
+                    processFileDto.getFilename(),
+                    minioAdapter.generatePreSignedUrlFromFullMinioPath(processFileDto.getFilePath(), 1)
+                )));
     }
 
     private static boolean isInputValid(ProcessFileDto processFileDto) {
-        return processFileDto.getFilename() != null && processFileDto.getFileUrl() != null;
+        return processFileDto.getFilename() != null && processFileDto.getFilePath() != null;
     }
 
     private static CseValidFileResource getCseValidFileResource(Map<String, CseValidFileResource> files, String fileType) {
         return Optional.ofNullable(files.get(fileType))
-                .orElseThrow(() -> new CseValidAdapterServiceException(fileType + " type not found"));
+            .orElseThrow(() -> new CseValidAdapterServiceException(fileType + " type not found"));
     }
 }

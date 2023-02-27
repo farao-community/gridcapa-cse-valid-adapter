@@ -27,3 +27,10 @@ cse-valid-runner:
 
 cse-valid-adapter:
   target-process: IDCC
+
+minio-adapter:
+  bucket: gridcapa
+  base-path:
+  access-key: gridcapa
+  secret-key: gridcapa
+  url: http://localhost:9000

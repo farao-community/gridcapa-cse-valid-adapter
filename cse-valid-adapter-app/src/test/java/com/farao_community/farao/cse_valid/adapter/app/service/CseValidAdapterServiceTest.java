@@ -12,9 +12,12 @@ import com.farao_community.farao.cse_valid.api.resource.ProcessType;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskDto;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskStatus;
 import com.farao_community.farao.gridcapa_cse_valid.starter.CseValidClient;
+import com.farao_community.farao.minio_adapter.starter.MinioAdapter;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +26,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import util.TestData;
 
 import static org.mockito.Mockito.*;
+import static util.TestData.*;
 
 /**
  * @author Oualid Aloui {@literal <oualid.aloui at rte-france.com>}
@@ -42,9 +46,20 @@ class CseValidAdapterServiceTest {
     @MockBean
     private Logger businessLogger;
 
+    @MockBean
+    private MinioAdapter minioAdapter;
+
     @Autowired
     private CseValidAdapterService cseValidAdapterService;
 
+    @BeforeEach
+    void setUp() {
+        Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(TTC_ADJUSTMENT_FILE_PATH, 1)).thenReturn(TTC_ADJUSTMENT_FILE_URL);
+        Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(IMPORT_CRAC_FILE_PATH, 1)).thenReturn(IMPORT_CRAC_FILE_URL);
+        Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(EXPORT_CRAC_FILE_PATH, 1)).thenReturn(EXPORT_CRAC_FILE_URL);
+        Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(CGM_FILE_PATH, 1)).thenReturn(CGM_FILE_URL);
+        Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(GLSK_FILE_PATH, 1)).thenReturn(GLSK_FILE_URL);
+    }
     /* --------------- IMPORT CORNER --------------- */
 
     @Test

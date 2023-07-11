@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, RTE (http://www.rte-france.com)
+ * Copyright (c) 2023, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -72,7 +72,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_PATH, IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto getImportTaskDtoWithoutTtcFile(TaskStatus status) {
@@ -82,7 +82,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_PATH, IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto getImportTaskDtoWithoutCgmFile(TaskStatus status) {
@@ -92,7 +92,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_PATH, TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_PATH, IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto getImportTaskDtoWithoutGlskFile(TaskStatus status) {
@@ -102,7 +102,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_PATH, TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(IMPORT_CRAC_FILE_PATH, IMPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, IMPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     /* --------------- EXPORT CORNER --------------- */
@@ -125,7 +125,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_PATH, EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto geExportTaskDtoWithoutTtcFile(TaskStatus status) {
@@ -135,7 +135,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_PATH, EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto getExportTaskDtoWithoutCgmFile(TaskStatus status) {
@@ -145,7 +145,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_PATH, TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_PATH, EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     public static TaskDto getExportTaskDtoWithoutGlskFile(TaskStatus status) {
@@ -155,7 +155,7 @@ public final class TestData {
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_PATH, TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(EXPORT_CRAC_FILE_PATH, EXPORT_CRAC_FILE_TYPE, ProcessFileStatus.VALIDATED, EXPORT_CRAC_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 
     /* --------------- IMPORT AND EXPORT CORNER --------------- */
@@ -167,6 +167,6 @@ public final class TestData {
         inputs.add(new ProcessFileDto(TTC_ADJUSTMENT_FILE_PATH, TTC_ADJUSTMENT_FILE_TYPE, ProcessFileStatus.VALIDATED, TTC_ADJUSTMENT_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(CGM_FILE_PATH, CGM_FILE_TYPE, ProcessFileStatus.VALIDATED, CGM_FILE_NAME, timestamp));
         inputs.add(new ProcessFileDto(GLSK_FILE_PATH, GLSK_FILE_TYPE, ProcessFileStatus.VALIDATED, GLSK_FILE_NAME, timestamp));
-        return new TaskDto(id, timestamp, status, Collections.emptyList(), inputs, Collections.emptyList(), Collections.emptyList());
+        return new TaskDto(id, timestamp, status, inputs, Collections.emptyList(), Collections.emptyList());
     }
 }

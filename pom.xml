@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.farao-community.farao</groupId>
         <artifactId>farao-parent-ws</artifactId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
     </parent>
 
     <artifactId>gridcapa-cse-valid-adapter</artifactId>
@@ -23,6 +23,21 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>Oualid ALOUI</name>
+            <email>oualid.aloui@rte-france.com</email>
+            <organization>RTE</organization>
+            <organizationUrl>http://www.rte-france.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Vincent BOCHET</name>
+            <email>vincent.bochet@rte-france.com</email>
+            <organization>RTE</organization>
+            <organizationUrl>http://www.rte-france.com</organizationUrl>
+        </developer>
+    </developers>
+
     <modules>
         <module>cse-valid-adapter-app</module>
     </modules>
@@ -36,9 +51,9 @@
     </build>
 
     <properties>
-        <gridcapa.starter.minio.adapter.version>1.0.0</gridcapa.starter.minio.adapter.version>
-        <task-manager.version>1.19.0</task-manager.version>
-        <cse-valid-runner.version>1.10.0</cse-valid-runner.version>
+        <gridcapa.starter.minio.adapter.version>1.1.1</gridcapa.starter.minio.adapter.version>
+        <task-manager.version>1.21.0</task-manager.version>
+        <cse-valid-runner.version>1.11.0</cse-valid-runner.version>
         <logstash.version>7.0.1</logstash.version>
     </properties>
 

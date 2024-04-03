@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>gridcapa-cse-valid-adapter</artifactId>
-    <version>1.10.0-SNAPSHOT</version>
+    <version>1.11.0-SNAPSHOT</version>
     <name>gridcapa-cse-valid-adapter</name>
     <description>Application that turns a RabbitMQ request from a TaskDto to a CseValidRequest</description>
     <packaging>pom</packaging>
@@ -51,13 +51,17 @@
     </build>
 
     <properties>
-        <gridcapa.starter.minio.adapter.version>1.1.2</gridcapa.starter.minio.adapter.version>
-        <task-manager.version>1.21.1</task-manager.version>
-        <cse-valid-runner.version>1.13.0</cse-valid-runner.version>
+        <!-- TECHNICAL DEPENDENCIES -->
         <logstash.version>7.0.1</logstash.version>
+
+        <!-- BUSINESS DEPENDENCIES -->
+        <cse-valid-runner.version>1.13.0</cse-valid-runner.version>
+        <task-manager.version>1.24.1</task-manager.version>
+        <gridcapa.starter.minio.adapter.version>1.1.2</gridcapa.starter.minio.adapter.version>
     </properties>
 
     <dependencyManagement>
+        <!-- COMPILE DEPENDENCIES -->
         <dependencies>
             <dependency>
                 <groupId>com.farao-community.farao</groupId>

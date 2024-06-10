@@ -60,7 +60,7 @@ class CseValidAdapterServiceTest {
         Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(CGM_FILE_PATH, 1)).thenReturn(CGM_FILE_URL);
         Mockito.when(minioAdapter.generatePreSignedUrlFromFullMinioPath(GLSK_FILE_PATH, 1)).thenReturn(GLSK_FILE_URL);
     }
-    /* --------------- IMPORT CORNER --------------- */
+    /* --------------- FULL IMPORT --------------- */
 
     @Test
     void runAsyncImportIdccShouldCallSuccessfullyCseValidClientRun() {

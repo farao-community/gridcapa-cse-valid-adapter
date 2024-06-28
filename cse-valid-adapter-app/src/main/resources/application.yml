@@ -1,36 +1,4 @@
 spring:
-  rabbitmq:
-    username: gridcapa
-    password: gridcapa
-    host: localhost
-    port: 5672
   cloud:
-    stream:
-      bindings:
-        consumeTask-in-0:
-          binder: rabbit
-          destination: cse-valid-run-task
-          group: cse-valid
-        task-status-update:
-          destination: task-manager-status-update
-      rabbit:
-        default:
-          consumer:
-            auto-bind-dlq: true
-            max-attempts: 1
     function:
       definition: consumeTask;consumeAutoTask
-
-cse-valid-runner:
-  amqp:
-    queue-name: cse-valid-requests
-
-cse-valid-adapter:
-  target-process: IDCC
-
-minio-adapter:
-  bucket: gridcapa
-  base-path:
-  access-key: gridcapa
-  secret-key: gridcapa
-  url: http://localhost:9000

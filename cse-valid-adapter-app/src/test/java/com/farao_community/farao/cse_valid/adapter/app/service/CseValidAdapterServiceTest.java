@@ -69,7 +69,7 @@ class CseValidAdapterServiceTest {
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.IDCC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 
@@ -85,13 +85,21 @@ class CseValidAdapterServiceTest {
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.D2CC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 
             verify(streamBridge, never()).send(any(), any());
             verify(cseValidClient, timeout(1000).times(1)).run(cseValidRequest);
         }
+    }
+
+    @Test
+    void runAsyncImportShouldFailBecauseRunHistoryNotFound() {
+        TaskDto taskDto = TestData.getImportTaskDtoNoHistory(TaskStatus.READY);
+        cseValidAdapterService.runAsync(taskDto);
+        verify(cseValidClient, never()).run(any());
+        verify(streamBridge, times(1)).send(any(), any());
     }
 
     @Test
@@ -127,7 +135,7 @@ class CseValidAdapterServiceTest {
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.IDCC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildIdccValidRequest(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 
@@ -143,7 +151,7 @@ class CseValidAdapterServiceTest {
 
         when(cseValidAdapterConfiguration.getTargetProcess()).thenReturn(ProcessType.D2CC);
         try (MockedStatic<CseValidRequest> mockStatic = mockStatic(CseValidRequest.class)) {
-            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
+            mockStatic.when(() -> CseValidRequest.buildD2ccValidRequest(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(cseValidRequest);
 
             cseValidAdapterService.runAsync(taskDto);
 

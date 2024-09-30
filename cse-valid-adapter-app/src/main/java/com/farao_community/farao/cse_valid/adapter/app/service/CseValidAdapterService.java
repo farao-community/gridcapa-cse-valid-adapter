@@ -11,6 +11,7 @@ import com.farao_community.farao.cse_valid.adapter.app.exception.CseValidAdapter
 import com.farao_community.farao.cse_valid.api.resource.CseValidFileResource;
 import com.farao_community.farao.cse_valid.api.resource.CseValidRequest;
 import com.farao_community.farao.gridcapa.task_manager.api.ProcessFileDto;
+import com.farao_community.farao.gridcapa.task_manager.api.ProcessRunDto;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskDto;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskStatus;
 import com.farao_community.farao.gridcapa.task_manager.api.TaskStatusUpdate;
@@ -18,11 +19,13 @@ import com.farao_community.farao.gridcapa_cse_valid.starter.CseValidClient;
 import com.farao_community.farao.minio_adapter.starter.MinioAdapter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 @Service
 public class CseValidAdapterService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CseValidAdapterService.class);
     private static final String TTC_ADJUSTMENT_FILE_TYPE = "TTC_ADJUSTMENT";
     private static final String IMPORT_CRAC_FILE_TYPE = "IMPORT_CRAC";
     private static final String EXPORT_CRAC_FILE_TYPE = "EXPORT_CRAC";
@@ -78,15 +82,16 @@ public class CseValidAdapterService {
             throw new CseValidAdapterServiceException("None of the " + IMPORT_CRAC_FILE_TYPE + " and " + EXPORT_CRAC_FILE_TYPE + " were found");
         }
         String id = taskDto.getId().toString();
+        String runId = getCurrentRunId(taskDto);
         OffsetDateTime timestamp = taskDto.getTimestamp();
         CseValidFileResource ttcAdjustment = getCseValidFileResource(files, TTC_ADJUSTMENT_FILE_TYPE);
         CseValidFileResource cgm = getCseValidFileResource(files, CGM_FILE_TYPE);
         CseValidFileResource glsk = getCseValidFileResource(files, GLSK_FILE_TYPE);
         switch (cseValidAdapterConfiguration.getTargetProcess()) {
             case IDCC:
-                return CseValidRequest.buildIdccValidRequest(id, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
+                return CseValidRequest.buildIdccValidRequest(id, runId, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
             case D2CC:
-                return CseValidRequest.buildD2ccValidRequest(id, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
+                return CseValidRequest.buildD2ccValidRequest(id, runId, timestamp, ttcAdjustment, importCrac, exportCrac, cgm, glsk);
             default:
                 throw new NotImplementedException("Unknown target process for CSE: " + cseValidAdapterConfiguration.getTargetProcess());
         }
@@ -110,5 +115,15 @@ public class CseValidAdapterService {
     private static CseValidFileResource getCseValidFileResource(Map<String, CseValidFileResource> files, String fileType) {
         return Optional.ofNullable(files.get(fileType))
             .orElseThrow(() -> new CseValidAdapterServiceException(fileType + " type not found"));
+    }
+
+    private String getCurrentRunId(TaskDto taskDto) {
+        List<ProcessRunDto> runHistory = taskDto.getRunHistory();
+        if (runHistory == null || runHistory.isEmpty()) {
+            LOGGER.warn("Failed to handle manual run request on timestamp {} because it has no run history", taskDto.getTimestamp());
+            throw new CseValidAdapterServiceException("Failed to handle manual run request on timestamp because it has no run history");
+        }
+        runHistory.sort((o1, o2) -> o2.getExecutionDate().compareTo(o1.getExecutionDate()));
+        return runHistory.get(0).getId().toString();
     }
 }

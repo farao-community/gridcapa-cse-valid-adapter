@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.farao-community.farao</groupId>
         <artifactId>farao-parent-ws</artifactId>
-        <version>1.10.1</version>
+        <version>1.11.0</version>
     </parent>
 
     <artifactId>gridcapa-cse-valid-adapter</artifactId>
@@ -51,9 +51,6 @@
     </build>
 
     <properties>
-        <!-- TECHNICAL DEPENDENCIES -->
-        <logstash.version>7.0.1</logstash.version>
-
         <!-- BUSINESS DEPENDENCIES -->
         <cse-valid-runner.version>1.24.0</cse-valid-runner.version>
         <task-manager.version>1.34.0</task-manager.version>
@@ -82,11 +79,6 @@
                 <groupId>com.farao-community.farao</groupId>
                 <artifactId>gridcapa-cse-valid-api</artifactId>
                 <version>${cse-valid-runner.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.logstash.logback</groupId>
-                <artifactId>logstash-logback-encoder</artifactId>
-                <version>${logstash.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

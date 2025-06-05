@@ -21,7 +21,7 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.cloud.stream.function.StreamBridge;
 import util.TestData;
 
@@ -34,19 +34,19 @@ import static util.TestData.*;
 @SpringBootTest
 class CseValidAdapterServiceTest {
 
-    @MockBean
+    @MockitoBean
     private CseValidClient cseValidClient;
 
-    @MockBean
+    @MockitoBean
     private CseValidAdapterConfiguration cseValidAdapterConfiguration;
 
-    @MockBean
+    @MockitoBean
     private StreamBridge streamBridge;
 
-    @MockBean
+    @MockitoBean
     private Logger businessLogger;
 
-    @MockBean
+    @MockitoBean
     private MinioAdapter minioAdapter;
 
     @Autowired

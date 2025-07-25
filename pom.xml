@@ -51,6 +51,7 @@
     </build>
 
     <properties>
+        <argLine /> <!-- required for java agent declaration, do not remove -->
         <!-- BUSINESS DEPENDENCIES -->
         <cse-valid-runner.version>1.27.0</cse-valid-runner.version>
         <task-manager.version>1.36.0</task-manager.version>

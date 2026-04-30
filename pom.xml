@@ -55,7 +55,7 @@
         <!-- BUSINESS DEPENDENCIES -->
         <cse-valid-runner.version>1.27.0</cse-valid-runner.version>
         <task-manager.version>1.36.0</task-manager.version>
-        <gridcapa.starter.minio.adapter.version>1.6.0</gridcapa.starter.minio.adapter.version>
+        <gridcapa.starter.minio.adapter.version>1.8.0</gridcapa.starter.minio.adapter.version>
     </properties>
 
     <dependencyManagement>
